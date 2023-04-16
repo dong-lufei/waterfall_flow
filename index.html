@@ -92,14 +92,16 @@
       })
       const wrap = document.getElementById("container")
       wrap.innerHTML = mockImg
+
+      window.onresize = function () {
+        location.reload()
+      }
+
       // 页面加载完毕后立即执行
       window.onload = function () {
         imgLocation("container", "box")
       }
 
-      window.onresize = function () {
-        location.reload()
-      }
       function imgLocation(parent, content) {
         const cparent = document.getElementById(parent)
         //cparent下的所有的第一层的子容器 box
