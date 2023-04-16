@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>waterfall_flow</title>
+
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .container {
+        overflow: hidden;
+        position: relative;
+      }
+      .box {
+        float: left;
+        padding: 5px;
+      }
+      .box-img {
+        width: 150px;
+        padding: 5px;
+        border: 1px solid #484848;
+        box-shadow: 0 0 5px #484848;
+      }
+      .box-img img {
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container">
+      <!-- <div class="box">
+        <div class="box-img">
+          <img
+            src="img/01.png"
+            alt="" />
+        </div>
+      </div> -->
+      <!-- .......后面接39个box，此处省略 -->
+    </div>
+    <script>
+      // 模拟生成图片元素
+      const srcArr = [
+        "https://lh1.hetaousercontent.com/img/0916930f5b98145e.jpg?thumbnail=true",
+        "https://lh1.hetaousercontent.com/img/57ed59f016f38316.jpg?thumbnail=true",
+        "https://lh1.hetaousercontent.com/img/38667c949d121977.png?thumbnail=true",
+        "https://lh1.hetaousercontent.com/static/9561e7340a87cff3",
+        "https://lh1.hetaousercontent.com/static/6efa9193b0a2fe92",
+        "https://lh1.hetaousercontent.com/static/34bafa39d2285189",
+        "https://lh1.hetaousercontent.com/static/0774c0e4f6731704",
+        "https://lh1.hetaousercontent.com/static/8f30701f39594202",
+        "https://lh1.hetaousercontent.com/static/f8d47a170b6b67ab",
+        "https://lh1.hetaousercontent.com/static/ea54c5d0bcd5ce42",
+        "https://lh1.hetaousercontent.com/static/2a04d7f0fe2456c8",
+        "https://lh1.hetaousercontent.com/static/8c814d1cdce30ddc",
+        "https://lh1.hetaousercontent.com/static/7a6f48a37313ed84",
+        "https://lh1.hetaousercontent.com/static/3a29d22b5c6861a1",
+        "https://lh1.hetaousercontent.com/static/31dca73b25ac8938",
+        "https://lh1.hetaousercontent.com/static/dce47932bb7ad522",
+        "https://lh1.hetaousercontent.com/static/dce47932bb7ad522",
+        "https://lh1.hetaousercontent.com/static/b41eda1710dc75ee",
+        "https://lh1.hetaousercontent.com/static/de45557f8222b07f",
+        "https://lh1.hetaousercontent.com/static/51a0dcace3d6642c",
+        "https://lh1.hetaousercontent.com/static/ee308078a91f1f9e",
+        "https://lh1.hetaousercontent.com/static/f177b9563fbfbe0b",
+        "https://lh1.hetaousercontent.com/static/ff7432d5e48be350",
+        "https://lh1.hetaousercontent.com/bimg/th?id=OIP.LKhwPKFXGyl-MqR03aVCwAHaHM",
+        "https://lh1.hetaousercontent.com/bimg/th?id=OIP.ExxGcUQiUGACeYIj-4smOAHaE8",
+        "https://lh1.hetaousercontent.com/img/6285e89909a8c421.jpg?thumbnail=true",
+        "https://lh1.hetaousercontent.com/img/34e25cbac86e65d2.gif?thumbnail=true",
+        "https://lh1.hetaousercontent.com/img/f57ca73b247af1f9.jpg?thumbnail=true",
+        "https://lh1.hetaousercontent.com/static/320259445591811f",
+        "https://lh1.hetaousercontent.com/static/60e114cf4a7a423a",
+        "https://lh1.hetaousercontent.com/static/e2bbd28df6c56611",
+        "https://lh1.hetaousercontent.com/static/92c395a163ca12e6",
+        "https://lh1.hetaousercontent.com/static/1fcbde04b5e2f6fc",
+        "https://lh1.hetaousercontent.com/static/806d7792a16e42be",
+        "https://lh1.hetaousercontent.com/static/8ce3b30af826d2c6",
+      ]
+      let mockImg = ""
+      srcArr.map(i => {
+        mockImg += `<div class="box">
+        <div class="box-img">
+          <img
+            src="${i}"
+            alt="" />
+        </div>
+      </div>`
+      })
+      const wrap = document.getElementById("container")
+      wrap.innerHTML = mockImg
+      // 页面加载完毕后立即执行
+      window.onload = function () {
+        imgLocation("container", "box")
+      }
+
+      window.onresize = function () {
+        location.reload()
+      }
+      function imgLocation(parent, content) {
+        const cparent = document.getElementById(parent)
+        //cparent下的所有的第一层的子容器 box
+        const ccontent = getChildElement(cparent, content) //数组，40个div
+
+        //从谁开始是需要被摆放位置的
+        winWidth = document.documentElement.clientWidth //视窗宽度
+        imgWidth = ccontent[0].offsetWidth //图片宽度
+
+        const num = Math.floor(winWidth / imgWidth) //第一行能放几张图
+        //操作num+1张图
+        const BoxHeightArr = []
+        for (let i = 0; i < ccontent.length; i++) {
+          //前num张只要计算高度
+          if (i < num) {
+            BoxHeightArr[i] = ccontent[i].offsetHeight
+          } else {
+            //我们要操作的box  :ccontent[i]
+            const minHeight = Math.min.apply(null, BoxHeightArr) //apply:把最小值这个方法借给它用
+            const minIndex = BoxHeightArr.indexOf(minHeight) //返回数组下标
+            ccontent[i].style.position = "absolute" //style设置样式
+            ccontent[i].style.top = minHeight + "px"
+            ccontent[i].style.left = imgWidth * minIndex + "px"
+
+            //更新最矮的那一列的高度
+            BoxHeightArr[minIndex] += ccontent[i].offsetHeight
+          }
+        }
+      }
+
+      //取到父容器中的某一层子容器
+      function getChildElement(parent, content) {
+        const contentArr = []
+        const allContent = parent.getElementsByTagName("*") //通过标签来选中得到一个数组
+        //遍历allContent把其中类名为content的容器都存到contentArr数组中
+        for (let i = 0; i < allContent.length; i++) {
+          if (allContent[i].className == content) {
+            //当前这个容器的类名是否为content
+            contentArr.push(allContent[i])
+          }
+        }
+        return contentArr
+      }
+    </script>
+  </body>
+</html>
